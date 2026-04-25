@@ -1,4 +1,21 @@
-// 1. Setup the Map FIRST
+// 1. Manual Naming Dictionary
+// Since your JSON doesn't have names, add them here based on the BoroCD
+const districtNames = {
+    "101": "Financial District / Battery Park City",
+    "102": "Greenwich Village / Soho",
+    "103": "Lower East Side / Chinatown",
+    "104": "Chelsea / Clinton",
+    "105": "Midtown",
+    "106": "Stuyvesant Town / Turtle Bay",
+    "107": "Upper West Side",
+    "108": "Upper East Side",
+    "109": "Morningside Heights / Hamilton Heights",
+    "110": "Central Harlem",
+    "111": "East Harlem",
+    "112": "Washington Heights / Inwood"
+};
+
+// 2. Setup the Map
 const manhattanBounds = [
     [40.68, -74.05], // Southwest
     [40.89, -73.88]  // Northeast
@@ -10,14 +27,14 @@ const map = L.map('map', {
     minZoom: 12
 }).setView([40.7831, -73.9712], 13);
 
-// 2. Add the Streets
+// 3. Add the Base Layer (Streets)
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap'
 }).addTo(map);
 
-let geojson; // We need this variable for the hover reset to work
+let geojson; 
 
-// 3. Hover & Style Functions
+// 4. Hover & Style Functions
 function highlightFeature(e) {
     var layer = e.target;
     layer.setStyle({
@@ -33,11 +50,16 @@ function resetHighlight(e) {
     geojson.resetStyle(e.target);
 }
 
-// 4. Load the Data
+// 5. Load and Filter the Data
 fetch('manhattan_districts.json')
     .then(res => res.json())
     .then(data => {
         geojson = L.geoJSON(data, {
+            // FILTER: Only show Manhattan (BoroCD starts with 1)
+            filter: function(feature) {
+                const boroId = feature.properties.BoroCD || "";
+                return boroId.toString().startsWith('1');
+            },
             style: {
                 color: "#34495e",
                 weight: 2,
@@ -45,18 +67,42 @@ fetch('manhattan_districts.json')
                 fillOpacity: 0.3
             },
             onEachFeature: function(feature, layer) {
+                // Get the ID (e.g., 101)
+                const id = feature.properties.BoroCD;
+                
+                // Look up the name from our dictionary at the top
+                const districtName = districtNames[id] || `District ${id}`;
+
+                // Attach the Tooltip (Label)
+                layer.bindTooltip(districtName, {
+                    sticky: true,
+                    direction: 'auto',
+                    className: 'district-label'
+                });
+
+                // Interaction Events
                 layer.on({
                     mouseover: highlightFeature,
                     mouseout: resetHighlight,
                     click: function(e) {
                         map.fitBounds(e.target.getBounds());
-                        document.getElementById('upload-section').classList.remove('hidden');
-                        document.getElementById('district-info').innerHTML = `
-                            <h2>District ${feature.properties.BoroCD}</h2>
-                            <p>Status: <strong>Locked</strong></p>
-                        `;
+                        
+                        // Show the upload section
+                        const uploadSection = document.getElementById('upload-section');
+                        if(uploadSection) uploadSection.classList.remove('hidden');
+                        
+                        // Update the info panel
+                        const infoPanel = document.getElementById('district-info');
+                        if(infoPanel) {
+                            infoPanel.innerHTML = `
+                                <h2>${districtName}</h2>
+                                <p>District ID: <strong>${id}</strong></p>
+                                <p>Status: <strong>Locked</strong></p>
+                            `;
+                        }
                     }
                 });
             }
         }).addTo(map);
-    });
+    })
+    .catch(err => console.error("Error loading GeoJSON:", err));
