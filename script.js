@@ -12,7 +12,8 @@ const districtNames = {
     "109": "Morningside Heights / Hamilton Heights",
     "110": "Central Harlem",
     "111": "East Harlem",
-    "112": "Washington Heights / Inwood"
+    "112": "Washington Heights / Inwood",
+    "164": "Central Park"
 };
 
 // 2. Setup the Map
