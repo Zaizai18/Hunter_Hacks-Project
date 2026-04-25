@@ -1,0 +1,6 @@
+flask
+flask-cors
+firebase-admin
+Pillow
+pillow-heif
+geopy
