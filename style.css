@@ -52,3 +52,38 @@ h1 {
 #submit-btn:hover {
     background-color: #34495e;
 }
+
+#submit-btn:disabled {
+    background-color: #95a5a6;
+    cursor: not-allowed;
+}
+
+.spot-item {
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    padding: 10px;
+    margin-bottom: 8px;
+    cursor: pointer;
+}
+
+.spot-item:hover {
+    border-color: #3498db;
+}
+
+.spot-item.selected {
+    border-color: #2ecc71;
+    background-color: #eafaf1;
+}
+
+.spot-category {
+    font-size: 11px;
+    background: #3498db;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 10px;
+    margin-left: 6px;
+}
+
+#ui-panel {
+    overflow-y: auto;
+}
