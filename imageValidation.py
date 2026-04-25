@@ -83,10 +83,10 @@ def validate_location(image_path, target_coords, radius_meters=100):
         return False, f"File error: {str(e)}"
 
 # --- Example Usage (Only runs if you run this file directly) ---
-if __name__ == "__main__":
+# if __name__ == "__main__":
     # Change this to match your actual test file name
-    TEST_FILE = "testPhoto.jpg" 
-    TARGET = (40.7484, -73.9857) 
+    # TEST_FILE = "testPhoto.jpg" 
+    # TARGET = (40.7484, -73.9857) 
 
     # approved, message = validate_location(TEST_FILE, TARGET, radius_meters=150)
     # print(f"Direct Script Test: {message}")
