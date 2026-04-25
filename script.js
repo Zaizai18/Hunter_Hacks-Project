@@ -20,8 +20,26 @@ const manhattanBounds = [
     [40.89, -73.88]
 ];
 
+// 1. DATA DICTIONARY (Put this first!)
+const districtData = {
+    "101": { name: "Financial District", info: "The historic heart of NYC and home to Wall Street." },
+    "102": { name: "Greenwich Village / Soho", info: "Famous for its jazz clubs, cafes, and Washington Square Park." },
+    "103": { name: "Lower East Side", info: "A vibrant area known for its nightlife and Jewish heritage." },
+    "104": { name: "Chelsea / Clinton", info: "Home to the High Line and hundreds of art galleries." },
+    "105": { name: "Midtown", info: "The bustling center of Manhattan, including Times Square." },
+    "106": { name: "Stuyvesant Town / Turtle Bay", info: "A largely residential area near the United Nations." },
+    "107": { name: "Upper West Side", info: "A cultural hub near Lincoln Center and the Museum of Natural History." },
+    "108": { name: "Upper East Side", info: "Known for the Museum Mile and upscale shopping." },
+    "109": { name: "Morningside Heights", info: "Home to Columbia University and Riverside Park." },
+    "110": { name: "Central Harlem", info: "The historic epicenter of African American culture." },
+    "111": { name: "East Harlem", info: "Also known as El Barrio, famous for its murals and street food." },
+    "112": { name: "Washington Heights / Inwood", info: "Home to The Met Cloisters and Highbridge Park." },
+    "164": { name: "Central Park", info: "Some would call this NYC's national park! With many beautiful paths to take, you can feel yourself transported from a big noisy city to a much quiter and tranquil nature spot."}
+};
+
+// 2. MAP SETUP
 const map = L.map('map', {
-    maxBounds: manhattanBounds,
+    maxBounds: [[40.68, -74.05], [40.89, -73.88]],
     maxBoundsViscosity: 1.0,
     minZoom: 12
 }).setView([40.7831, -73.9712], 13);
@@ -81,18 +99,44 @@ function updateMapColors() {
     });
 }
 
+// 3. HOVER FUNCTIONS (Must be defined before fetch)
 function highlightFeature(e) {
-    e.target.setStyle({ weight: 5, color: '#2c3e50', fillOpacity: 0.7 });
-    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-        e.target.bringToFront();
+    var layer = e.target;
+
+    layer.setStyle({
+        weight: 4,
+        color: '#2c3e50',
+        fillOpacity: 0.7,
+        fillColor: '#f1c40f'
+    });
+    layer.bringToFront();
+
+    const id = layer.feature.properties.BoroCD.toString();
+    const infoPanel = document.getElementById('district-info');
+
+    const data = districtData[id] || {
+        name: `District ${id}`,
+        info: "Data coming soon."
+    };
+
+    if (infoPanel) {
+        infoPanel.innerHTML = `
+            <h2>${data.name}</h2>
+            <p>${data.info}</p>
+        `;
     }
 }
 
 function resetHighlight(e) {
     geojson.resetStyle(e.target);
     updateMapColors();
+    document.getElementById('district-info').innerHTML = `
+        <h2>Manhattan</h2>
+        <p>Hover over a district to explore.</p>
+    `;
 }
 
+// 4. LOAD AND FILTER DATA
 fetch('manhattan_districts.json')
     .then(res => res.json())
     .then(data => {
