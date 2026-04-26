@@ -6,16 +6,14 @@
     <title>Manhattan Unlocked</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Top bar counter -->
     <header id="topbar">
         <div id="topbar-title">Manhattan Unlocked</div>
         <div id="counter-wrap">
-            
             <span id="counter-num">0</span>
             <span id="counter-label">/ 12 districts explored</span>
         </div>
@@ -31,11 +29,28 @@
 
             <!-- Default state -->
             <div id="panel-default">
-                <div class="panel-eyebrow">Start here</div>
-                <h2 class="panel-title">Unlock Manhattan</h2>
-                <p class="panel-body">Click the gold district on the map to begin. Upload a photo taken there to check in and unlock adjacent neighborhoods.</p>
+                <div class="panel-eyebrow">Your progress</div>
 
-                <!-- Hover preview — updates as user mouses over districts -->
+                <div class="stats-grid">
+                    <div class="stat-block">
+                        <div class="stat-value" id="stat-pct">0%</div>
+                        <div class="stat-label">of Manhattan</div>
+                    </div>
+                    <div class="stat-block">
+                        <div class="stat-value" id="stat-count">0 / 12</div>
+                        <div class="stat-label">districts</div>
+                    </div>
+                    <div class="stat-block">
+                        <div class="stat-value" id="stat-visits">0</div>
+                        <div class="stat-label">check-ins</div>
+                    </div>
+                </div>
+
+                <div class="stat-next-wrap">
+                    <div class="panel-eyebrow">Up next</div>
+                    <div id="stat-next" class="stat-next-name">Financial District & Battery Park City</div>
+                </div>
+
                 <div id="hover-preview" class="hidden">
                     <hr class="panel-divider">
                     <div class="panel-eyebrow">Hovering</div>
@@ -59,7 +74,7 @@
                 <p class="panel-body" id="panel-body-text"></p>
 
                 <div id="upload-section" class="hidden">
-                    <label class="upload-label" id="upload-label-text" for="photo-upload">
+                    <label class="upload-label" for="photo-upload">
                         <span class="upload-icon">↑</span>
                         <span>Drop a photo or tap to browse</span>
                         <span class="upload-hint">Must be taken at this location</span>
@@ -77,13 +92,19 @@
                 <h2 class="panel-title" id="congrats-district">—</h2>
                 <p class="panel-body" id="congrats-body"></p>
                 <div id="congrats-unlocked-list"></div>
-                <button id="congrats-continue-btn">Continue Exploring →</button>
+                <div class="congrats-actions">
+                    <button id="share-btn" class="btn-secondary">Share ↗</button>
+                    <button id="congrats-continue-btn">Continue →</button>
+                </div>
             </div>
 
+            </div>
         </div>
+
     </div>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="config.js"></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="public/js/firebase-config.js"></script>

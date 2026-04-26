@@ -1,4 +1,5 @@
-const BACKEND_URL = "YOUR_CLOUD_RUN_URL"; // e.g. https://manhattan-unlocked-xyz.run.app
+const BACKEND_URL   = window.APP_CONFIG?.BACKEND_URL  || "YOUR_CLOUD_RUN_URL";
+const MAPBOX_TOKEN  = window.APP_CONFIG?.MAPBOX_TOKEN || "";
 
 const districtNames = {
     "101": "Financial District / Battery Park City",
@@ -15,7 +16,7 @@ const districtNames = {
     "112": "Washington Heights / Inwood"
 };
 
-// ─── District data (name + description) ──────────────────────────────────────
+// ─── District data ────────────────────────────────────────────────────────────
 const districtData = {
     "101": { name: "Financial District & Battery Park City", info: "The historic heart of NYC and home to Wall Street. Start your Manhattan journey here." },
     "102": { name: "Greenwich Village & SoHo",              info: "Famous for its jazz clubs, cafes, and Washington Square Park." },
@@ -34,20 +35,22 @@ const districtData = {
 
 function dName(id) { return districtData[String(id)]?.name || `District ${id}`; }
 
+const MANHATTAN_CDS = ['101','102','103','104','105','106','107','108','109','110','111','112','164'];
+
 // ─── Adjacency map ────────────────────────────────────────────────────────────
 const adjacency = {
-    "101": ["102", "103"],          // FiDi → Greenwich/SoHo, LES/Chinatown
-    "102": ["103", "104"],          // Greenwich → LES, Chelsea
-    "103": ["106"],                 // LES → Stuyvesant/Turtle Bay
-    "104": ["105"],                 // Chelsea → Midtown
-    "105": ["106", "107", "108"],   // Midtown → Stuyvesant, UWS, UES
-    "106": ["108"],                 // Stuyvesant → UES
-    "107": ["109"],                 // UWS → Morningside/Hamilton Heights
-    "108": ["111"],                 // UES → East Harlem
-    "109": ["110"],                 // Morningside → Central Harlem
-    "110": ["112"],                 // Central Harlem → Washington Heights
-    "111": ["110"],                 // East Harlem → Central Harlem
-    "112": []                       // Washington Heights — final district
+    "101": ["102", "103"],
+    "102": ["103", "104"],
+    "103": ["106"],
+    "104": ["105"],
+    "105": ["106", "107", "108"],
+    "106": ["108"],
+    "107": ["109"],
+    "108": ["111"],
+    "109": ["110"],
+    "110": ["112"],
+    "111": ["110"],
+    "112": []
 };
 
 // ─── State ────────────────────────────────────────────────────────────────────
@@ -57,28 +60,20 @@ function loadState() {
     try {
         const raw = localStorage.getItem(STORAGE_KEY);
         if (raw) {
-            const parsed = JSON.parse(raw);
+            const p = JSON.parse(raw);
             return {
-                unlockedDistricts: Array.isArray(parsed.unlockedDistricts) ? parsed.unlockedDistricts : ["101"],
-                completedDistricts: Array.isArray(parsed.completedDistricts) ? parsed.completedDistricts : [],
-                visitCounts: (parsed.visitCounts && typeof parsed.visitCounts === 'object') ? parsed.visitCounts : {}
+                unlockedDistricts:  Array.isArray(p.unlockedDistricts)  ? p.unlockedDistricts  : ["101"],
+                completedDistricts: Array.isArray(p.completedDistricts) ? p.completedDistricts : [],
+                visitCounts: (p.visitCounts && typeof p.visitCounts === 'object') ? p.visitCounts : {}
             };
         }
     } catch(e) {}
-    return {
-        unlockedDistricts: ["101"],
-        completedDistricts: [],
-        visitCounts: {}
-    };
+    return { unlockedDistricts: ["101"], completedDistricts: [], visitCounts: {} };
 }
 
-function saveState(state) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-}
+function saveState(s) { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); }
 
 let state = loadState();
-let geojsonLayer;
-let layerMap = {};         // BoroCD → Leaflet layer
 let selectedDistrictId = null;
 
 // ─── Firebase auth ────────────────────────────────────────────────────────────
@@ -110,89 +105,232 @@ async function syncDistrictsFromBackend() {
     try {
         const res = await fetch(`${BACKEND_URL}/districts/${currentUid}`);
         const backendDistricts = await res.json();
-        // Merge backend district state into local state
         Object.entries(backendDistricts).forEach(([districtName, info]) => {
             const id = Object.keys(districtNames).find(k => districtNames[k] === districtName);
             if (!id) return;
-            if (!state.unlockedDistricts.includes(id) && (info.spotsUnlocked > 0 || info.districtUnlocked)) {
+            if (!state.unlockedDistricts.includes(id) && (info.spotsUnlocked > 0 || info.districtUnlocked))
                 state.unlockedDistricts.push(id);
-            }
-            if (info.districtUnlocked && !state.completedDistricts.includes(id)) {
+            if (info.districtUnlocked && !state.completedDistricts.includes(id))
                 state.completedDistricts.push(id);
-            }
             if (info.spotsUnlocked) state.visitCounts[id] = info.spotsUnlocked;
         });
         saveState(state);
         refreshAllLayers();
         updateCounter();
+        updateStatsPanel();
     } catch (err) {
-        console.error("Failed to sync districts from backend:", err);
+        console.error("Failed to sync districts:", err);
     }
 }
 
-// ─── Map setup ────────────────────────────────────────────────────────────────
-const manhattanBounds = [[40.68, -74.05], [40.89, -73.88]];
+// ─── Mapbox setup ─────────────────────────────────────────────────────────────
+mapboxgl.accessToken = MAPBOX_TOKEN;
 
-const map = L.map('map', {
-    maxBounds: [[40.68, -74.05], [40.89, -73.88]],
-    maxBoundsViscosity: 1.0,
-    minZoom: 12
-}).setView([40.7580, -73.9855], 13);
+const map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/dark-v11',
+    center: [-73.9855, 40.7580],
+    zoom: 12,
+    pitch: 45,
+    bearing: -10,
+    maxBounds: [[-74.10, 40.65], [-73.85, 40.92]],
+    minZoom: 11
+});
 
-L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_matter/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-    subdomains: 'abcd',
-    maxZoom: 20
-}).addTo(map);
+map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'top-left');
 
-// ─── District style logic ─────────────────────────────────────────────────────
+// ─── Mapbox expression builders ───────────────────────────────────────────────
 
-function getDistrictStyle(id) {
-    const sid = String(id);
-    if (state.completedDistricts.includes(sid)) {
-        return { color: "#2e5c3a", weight: 2, fillColor: "#4a7c59", fillOpacity: 0.65 };
+function isStartDistrict(id) {
+    return id === '101' && !state.completedDistricts.length && !(state.visitCounts['101'] || 0);
+}
+
+function buildColorExpression() {
+    const pairs = [];
+    for (const id of MANHATTAN_CDS) {
+        if (state.completedDistricts.includes(id))        pairs.push(id, '#4a7c59');
+        else if (state.unlockedDistricts.includes(id))    pairs.push(id, isStartDistrict(id) ? '#c8972a' : '#76a889');
+        else                                               pairs.push(id, '#3a3a4a');
     }
-    if (state.unlockedDistricts.includes(sid)) {
-        if (sid === "101" && state.completedDistricts.length === 0 && (state.visitCounts["101"] || 0) === 0) {
-            // Starting district, not yet visited — gold
-            return { color: "#8a6218", weight: 2.5, fillColor: "#c8972a", fillOpacity: 0.55 };
+    return ['match', ['to-string', ['get', 'BoroCD']], ...pairs, '#3a3a4a'];
+}
+
+function buildHeightExpression() {
+    const pairs = [];
+    for (const id of MANHATTAN_CDS) {
+        if (state.completedDistricts.includes(id))        pairs.push(id, 250);
+        else if (state.unlockedDistricts.includes(id))    pairs.push(id, isStartDistrict(id) ? 180 : 120);
+        else                                               pairs.push(id, 25);
+    }
+    return ['match', ['to-string', ['get', 'BoroCD']], ...pairs, 25];
+}
+
+function buildOutlineExpression() {
+    const pairs = [];
+    for (const id of MANHATTAN_CDS) {
+        if (state.completedDistricts.includes(id))        pairs.push(id, '#2e5c3a');
+        else if (state.unlockedDistricts.includes(id))    pairs.push(id, isStartDistrict(id) ? '#8a6218' : '#2e5c3a');
+        else                                               pairs.push(id, '#222233');
+    }
+    return ['match', ['to-string', ['get', 'BoroCD']], ...pairs, '#222233'];
+}
+
+const CD_FILTER = ['in', ['to-string', ['get', 'BoroCD']], ['literal', MANHATTAN_CDS]];
+
+// ─── Map load ─────────────────────────────────────────────────────────────────
+map.on('load', () => {
+    // Real 3D buildings behind the districts
+    map.addLayer({
+        id: '3d-buildings',
+        source: 'composite',
+        'source-layer': 'building',
+        filter: ['==', 'extrude', 'true'],
+        type: 'fill-extrusion',
+        minzoom: 14,
+        paint: {
+            'fill-extrusion-color': '#0f0f1a',
+            'fill-extrusion-height': ['get', 'height'],
+            'fill-extrusion-base': ['get', 'min_height'],
+            'fill-extrusion-opacity': 0.65
         }
-        return { color: "#2e5c3a", weight: 2, fillColor: "#76a889", fillOpacity: 0.45 };
+    });
+
+    map.addSource('districts', { type: 'geojson', data: 'manhattan_districts.json' });
+
+    // Colored 3D district blocks
+    map.addLayer({
+        id: 'districts-extrusion',
+        type: 'fill-extrusion',
+        source: 'districts',
+        filter: CD_FILTER,
+        paint: {
+            'fill-extrusion-color':   buildColorExpression(),
+            'fill-extrusion-height':  buildHeightExpression(),
+            'fill-extrusion-base':    0,
+            'fill-extrusion-opacity': 0.85
+        }
+    });
+
+    // District borders
+    map.addLayer({
+        id: 'districts-outline',
+        type: 'line',
+        source: 'districts',
+        filter: CD_FILTER,
+        paint: {
+            'line-color': buildOutlineExpression(),
+            'line-width': 1.5
+        }
+    });
+
+    // Invisible hover highlight layer — filter set dynamically on hover
+    map.addLayer({
+        id: 'districts-hover',
+        type: 'fill-extrusion',
+        source: 'districts',
+        filter: ['==', ['to-string', ['get', 'BoroCD']], ''],
+        paint: {
+            'fill-extrusion-color':   '#ffffff',
+            'fill-extrusion-height':  350,
+            'fill-extrusion-opacity': 0.12
+        }
+    });
+
+    map.on('mousemove',  'districts-extrusion', onDistrictHover);
+    map.on('mouseleave', 'districts-extrusion', onDistrictLeave);
+    map.on('click',      'districts-extrusion', onDistrictClick);
+
+    updateCounter();
+    updateStatsPanel();
+    showDefaultPanel();
+});
+
+// ─── Map event handlers ───────────────────────────────────────────────────────
+let hoveredId = null;
+
+function onDistrictHover(e) {
+    const id = String(e.features[0].properties.BoroCD);
+    if (id === hoveredId) return;
+    hoveredId = id;
+    map.getCanvas().style.cursor = 'pointer';
+    map.setFilter('districts-hover', ['==', ['to-string', ['get', 'BoroCD']], id]);
+
+    if (!selectedDistrictId) {
+        const entry = districtData[id] || {};
+        if (entry.info) {
+            document.getElementById('hover-preview-name').textContent = entry.name || `District ${id}`;
+            document.getElementById('hover-preview-info').textContent = entry.info;
+            document.getElementById('hover-preview').classList.remove('hidden');
+        }
     }
-    return { color: "#8a867c", weight: 1, fillColor: "#b0aba0", fillOpacity: 0.5 };
 }
 
-function getHoverStyle(id) {
-    const sid = String(id);
-    const isLocked = !state.unlockedDistricts.includes(sid);
-    if (isLocked) {
-        return { weight: 2, color: "#8a867c", fillColor: "#999490", fillOpacity: 0.6 };
-    }
-    return { weight: 3, color: "#1a3a24", fillColor: "#3a6a49", fillOpacity: 0.8 };
+function onDistrictLeave() {
+    hoveredId = null;
+    map.getCanvas().style.cursor = 'default';
+    map.setFilter('districts-hover', ['==', ['to-string', ['get', 'BoroCD']], '']);
+    document.getElementById('hover-preview').classList.add('hidden');
+}
+
+function onDistrictClick(e) {
+    const id = String(e.features[0].properties.BoroCD);
+    selectedDistrictId = id;
+    map.flyTo({
+        center: e.lngLat,
+        zoom: Math.max(map.getZoom(), 13),
+        pitch: 55,
+        bearing: (Math.random() - 0.5) * 20,
+        duration: 1000,
+        essential: true
+    });
+    showSelectedPanel(id);
+}
+
+// ─── Layer refresh ────────────────────────────────────────────────────────────
+function refreshAllLayers() {
+    if (!map.getLayer('districts-extrusion')) return;
+    map.setPaintProperty('districts-extrusion', 'fill-extrusion-color',  buildColorExpression());
+    map.setPaintProperty('districts-extrusion', 'fill-extrusion-height', buildHeightExpression());
+    map.setPaintProperty('districts-outline',   'line-color',            buildOutlineExpression());
 }
 
 // ─── Counter ──────────────────────────────────────────────────────────────────
-
 function updateCounter() {
     const count = state.completedDistricts.length;
     const el = document.getElementById('counter-num');
     el.textContent = count;
     el.classList.remove('counter-pop');
-    void el.offsetWidth; // reflow to restart animation
+    void el.offsetWidth;
     el.classList.add('counter-pop');
     document.getElementById('progress-fill').style.width = `${(count / 12) * 100}%`;
 }
 
-// ─── Panel rendering ──────────────────────────────────────────────────────────
+// ─── Stats panel ──────────────────────────────────────────────────────────────
+function getNextTarget() {
+    for (const id of state.unlockedDistricts) {
+        if (!state.completedDistricts.includes(id)) return dName(id);
+    }
+    return state.completedDistricts.length >= 12 ? 'Manhattan conquered!' : 'Start at FiDi';
+}
 
+function updateStatsPanel() {
+    const count = state.completedDistricts.length;
+    const totalVisits = Object.values(state.visitCounts).reduce((a, b) => a + b, 0);
+    document.getElementById('stat-pct').textContent    = `${Math.round(count / 12 * 100)}%`;
+    document.getElementById('stat-count').textContent  = `${count} / 12`;
+    document.getElementById('stat-visits').textContent = `${totalVisits}`;
+    document.getElementById('stat-next').textContent   = getNextTarget();
+}
+
+// ─── Panel rendering ──────────────────────────────────────────────────────────
 function showDefaultPanel() {
     document.getElementById('panel-default').classList.remove('hidden');
     document.getElementById('panel-selected').classList.add('hidden');
     document.getElementById('panel-congrats').classList.add('hidden');
+    updateStatsPanel();
 }
 
 function showSelectedPanel(id) {
-    // Swap panel first so a state error never leaves the default panel stuck
     document.getElementById('panel-default').classList.add('hidden');
     document.getElementById('panel-congrats').classList.add('hidden');
     document.getElementById('panel-selected').classList.remove('hidden');
@@ -201,16 +339,16 @@ function showSelectedPanel(id) {
     const entry = districtData[sid] || {};
     const name = entry.name || `District ${sid}`;
     const info = entry.info || '';
-    const isUnlocked = state.unlockedDistricts.includes(sid);
+    const isUnlocked  = state.unlockedDistricts.includes(sid);
     const isCompleted = state.completedDistricts.includes(sid);
-    const visits = state.visitCounts[sid] || 0;
+    const visits  = state.visitCounts[sid] || 0;
     const REQUIRED = 2;
-    const TOTAL = 3;
+    const TOTAL    = 3;
 
     const statusEl = document.getElementById('panel-status-label');
-    if (isCompleted) statusEl.textContent = "Completed ✓";
-    else if (isUnlocked) statusEl.textContent = "Unlocked — explore to complete";
-    else statusEl.textContent = "Locked";
+    if (isCompleted)      statusEl.textContent = "Completed ✓";
+    else if (isUnlocked)  statusEl.textContent = "Unlocked — explore to complete";
+    else                  statusEl.textContent = "Locked";
 
     document.getElementById('panel-district-name').textContent = name;
 
@@ -218,22 +356,14 @@ function showSelectedPanel(id) {
     descEl.textContent = info;
     descEl.classList.toggle('hidden', !info);
 
-    // Visit count pills
     const pillsEl = document.getElementById('panel-visit-count');
     pillsEl.innerHTML = '';
     if (isUnlocked) {
         for (let i = 0; i < TOTAL; i++) {
             const pill = document.createElement('span');
-            if (i < visits) {
-                pill.className = 'pill pill-done';
-                pill.textContent = `Visit ${i + 1} ✓`;
-            } else if (i < REQUIRED) {
-                pill.className = 'pill pill-needed';
-                pill.textContent = `Visit ${i + 1} needed`;
-            } else {
-                pill.className = 'pill pill-extra';
-                pill.textContent = `Visit ${i + 1} bonus`;
-            }
+            if (i < visits)        { pill.className = 'pill pill-done';   pill.textContent = `Visit ${i + 1} ✓`; }
+            else if (i < REQUIRED) { pill.className = 'pill pill-needed'; pill.textContent = `Visit ${i + 1} needed`; }
+            else                   { pill.className = 'pill pill-extra';  pill.textContent = `Visit ${i + 1} bonus`; }
             pillsEl.appendChild(pill);
         }
     }
@@ -266,7 +396,7 @@ function showSelectedPanel(id) {
 }
 
 function showCongratsPanel(districtId, newlyUnlocked) {
-    const sid = String(districtId);
+    const sid  = String(districtId);
     const name = dName(sid);
 
     document.getElementById('panel-default').classList.add('hidden');
@@ -276,7 +406,6 @@ function showCongratsPanel(districtId, newlyUnlocked) {
     document.getElementById('congrats-district').textContent = name;
 
     const unlockedNames = (newlyUnlocked || []).map(id => dName(id));
-
     let bodyText = `You've now explored ${name}!`;
     if (unlockedNames.length > 0) {
         bodyText += ` You've unlocked ${unlockedNames.length === 1
@@ -302,10 +431,12 @@ function showCongratsPanel(districtId, newlyUnlocked) {
         chip.innerHTML = `<span class="unlock-chip-icon">⭐</span><span>All adjacent districts already open</span>`;
         list.appendChild(chip);
     }
+
+    // Wire up the share button for this specific district
+    document.getElementById('share-btn').onclick = () => shareUnlock(sid);
 }
 
 // ─── Check-in logic ───────────────────────────────────────────────────────────
-
 async function handleCheckIn() {
     const file = document.getElementById('photo-upload').files[0];
     if (!file || !selectedDistrictId) return;
@@ -318,7 +449,6 @@ async function handleCheckIn() {
     const sid = String(selectedDistrictId);
 
     if (currentUid && BACKEND_URL !== "YOUR_CLOUD_RUN_URL") {
-        // Use real Firebase backend
         try {
             const formData = new FormData();
             formData.append("image", file);
@@ -334,7 +464,6 @@ async function handleCheckIn() {
             return;
         }
     } else {
-        // Demo mode — always approves after a short delay
         await new Promise(r => setTimeout(r, 1200));
         result = { approved: true, message: "Check-in approved! (demo mode)" };
     }
@@ -347,7 +476,6 @@ async function handleCheckIn() {
         return;
     }
 
-    // Update local state
     if (!state.visitCounts[sid]) state.visitCounts[sid] = 0;
     state.visitCounts[sid]++;
 
@@ -356,8 +484,7 @@ async function handleCheckIn() {
 
     if (state.visitCounts[sid] >= REQUIRED && !state.completedDistricts.includes(sid)) {
         state.completedDistricts.push(sid);
-        const toUnlock = adjacency[sid] || [];
-        toUnlock.forEach(adjId => {
+        (adjacency[sid] || []).forEach(adjId => {
             if (!state.unlockedDistricts.includes(adjId)) {
                 state.unlockedDistricts.push(adjId);
                 newlyUnlocked.push(adjId);
@@ -366,6 +493,7 @@ async function handleCheckIn() {
         saveState(state);
         refreshAllLayers();
         updateCounter();
+        updateStatsPanel();
         showCongratsPanel(sid, newlyUnlocked);
     } else {
         saveState(state);
@@ -373,77 +501,107 @@ async function handleCheckIn() {
     }
 }
 
-// ─── Layer management ─────────────────────────────────────────────────────────
+// ─── Share card ───────────────────────────────────────────────────────────────
+function generateShareCard(districtId) {
+    const canvas  = document.createElement('canvas');
+    canvas.width  = 600;
+    canvas.height = 300;
+    const ctx  = canvas.getContext('2d');
+    const name = dName(districtId);
+    const count = state.completedDistricts.length;
 
-function refreshAllLayers() {
-    Object.entries(layerMap).forEach(([id, layer]) => {
-        layer.setStyle(getDistrictStyle(id));
-    });
+    // Background
+    const grad = ctx.createLinearGradient(0, 0, 600, 300);
+    grad.addColorStop(0, '#1a1a18');
+    grad.addColorStop(1, '#252520');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, 600, 300);
+
+    // Gold left accent bar
+    ctx.fillStyle = '#c8972a';
+    ctx.fillRect(0, 0, 5, 300);
+
+    // App label
+    ctx.fillStyle = '#c8972a';
+    ctx.font = '600 11px monospace';
+    ctx.fillText('MANHATTAN UNLOCKED', 28, 48);
+
+    // District name
+    ctx.fillStyle = '#f2efe8';
+    ctx.font = 'bold 40px Georgia, serif';
+    ctx.fillText(name, 28, 125);
+
+    // "Explored" badge
+    ctx.fillStyle = '#2e5c3a';
+    ctx.beginPath();
+    ctx.roundRect(28, 148, 115, 28, 4);
+    ctx.fill();
+    ctx.fillStyle = '#a3cfb0';
+    ctx.font = '600 11px monospace';
+    ctx.fillText('✓  EXPLORED', 42, 167);
+
+    // Progress text
+    ctx.fillStyle = '#888882';
+    ctx.font = '13px monospace';
+    ctx.fillText(`${count} of 12 Manhattan districts explored`, 28, 222);
+
+    // Progress bar track
+    ctx.fillStyle = '#2e2e2a';
+    ctx.beginPath();
+    ctx.roundRect(28, 238, 544, 5, 3);
+    ctx.fill();
+
+    // Progress bar fill
+    ctx.fillStyle = '#c8972a';
+    ctx.beginPath();
+    ctx.roundRect(28, 238, Math.round(544 * count / 12), 5, 3);
+    ctx.fill();
+
+    // Percentage label
+    ctx.fillStyle = '#c8972a';
+    ctx.font = 'bold 13px monospace';
+    ctx.textAlign = 'right';
+    ctx.fillText(`${Math.round(count / 12 * 100)}%`, 572, 250);
+    ctx.textAlign = 'left';
+
+    return canvas;
 }
 
-// ─── Load GeoJSON ─────────────────────────────────────────────────────────────
+async function shareUnlock(districtId) {
+    const canvas = generateShareCard(districtId);
+    canvas.toBlob(async (blob) => {
+        try {
+            await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+            showToast('Card copied to clipboard!');
+        } catch {
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `manhattan-unlocked-${districtId}.png`;
+            a.click();
+            showToast('Card downloaded!');
+        }
+    }, 'image/png');
+}
 
-fetch('manhattan_districts.json')
-    .then(res => res.json())
-    .then(data => {
-        geojsonLayer = L.geoJSON(data, {
-            filter: feature => String(feature.properties.BoroCD).startsWith('1'),
-            style: feature => getDistrictStyle(feature.properties.BoroCD),
-            onEachFeature: (feature, layer) => {
-                const id = String(feature.properties.BoroCD);
-                const entry = districtData[id] || {};
-                const name = entry.name || `District ${id}`;
-                layerMap[id] = layer;
-
-                layer.bindTooltip(name, {
-                    sticky: true,
-                    direction: 'auto',
-                    className: 'district-label'
-                });
-
-                layer.on({
-                    mouseover(e) {
-                        e.target.setStyle(getHoverStyle(id));
-                        if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-                            e.target.bringToFront();
-                        }
-                        // Show description preview in default panel when nothing is selected
-                        if (!selectedDistrictId && entry.info) {
-                            const defaultPanel = document.getElementById('panel-default');
-                            if (!defaultPanel.classList.contains('hidden')) {
-                                document.getElementById('hover-preview-name').textContent = name;
-                                document.getElementById('hover-preview-info').textContent = entry.info;
-                                document.getElementById('hover-preview').classList.remove('hidden');
-                            }
-                        }
-                    },
-                    mouseout(e) {
-                        e.target.setStyle(getDistrictStyle(id));
-                        document.getElementById('hover-preview').classList.add('hidden');
-                    },
-                    click(e) {
-                        map.fitBounds(e.target.getBounds(), { padding: [20, 20] });
-                        selectedDistrictId = id;
-                        showSelectedPanel(id);
-                    }
-                });
-            }
-        }).addTo(map);
-
-        updateCounter();
-    })
-    .catch(err => console.error("Error loading GeoJSON:", err));
+function showToast(msg) {
+    let toast = document.getElementById('toast');
+    if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'toast';
+        document.body.appendChild(toast);
+    }
+    toast.textContent = msg;
+    toast.classList.add('toast-show');
+    setTimeout(() => toast.classList.remove('toast-show'), 2500);
+}
 
 // ─── UI events ────────────────────────────────────────────────────────────────
-
 document.getElementById('photo-upload').addEventListener('change', function() {
     const file = this.files[0];
-    const fileChosen = document.getElementById('file-chosen');
-    const submitBtn = document.getElementById('submit-btn');
     if (file) {
-        fileChosen.textContent = `📎 ${file.name}`;
-        fileChosen.classList.remove('hidden');
-        submitBtn.classList.remove('hidden');
+        document.getElementById('file-chosen').textContent = `📎 ${file.name}`;
+        document.getElementById('file-chosen').classList.remove('hidden');
+        document.getElementById('submit-btn').classList.remove('hidden');
     }
 });
 
@@ -452,5 +610,3 @@ document.getElementById('submit-btn').addEventListener('click', handleCheckIn);
 document.getElementById('congrats-continue-btn').addEventListener('click', () => {
     showSelectedPanel(selectedDistrictId);
 });
-
-showDefaultPanel();

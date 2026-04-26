@@ -1,5 +1,6 @@
 # Environment variables - never commit these
 .env
+config.js
 service-account.json
 .env.local
 .env.*.local
