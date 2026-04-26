@@ -5,15 +5,15 @@
 
 // ── District metadata ────────────────────────────────────────
 const districtData = {
-    "101": { name: "Financial District",         info: "The historic heart of NYC and home to Wall Street.",                         challenge: "Snap a photo at the Charging Bull or 9/11 Memorial." },
-    "102": { name: "Greenwich Village / SoHo",   info: "Famous for its jazz clubs, cafes, and Washington Square Park.",              challenge: "Find Washington Square Park's famous arch." },
+    "101": { name: "Financial District",         info: "The historic heart of NYC and home to Wall Street and one of the highest-income work zones (finance, hedge funds, banking).",                         challenge: "Snap a photo at the Charging Bull or 9/11 Memorial." },
+    "102": { name: "Greenwich Village / SoHo",   info: "Famous for its jazz clubs, cafes, and Washington Square Park. Among highest property values in NYC.",              challenge: "Find Washington Square Park's famous arch." },
     "103": { name: "Lower East Side",            info: "A vibrant area known for its nightlife and East River Park.",                challenge: "Visit Katz's Deli or the Tenement Museum." },
-    "104": { name: "Chelsea / Clinton",          info: "Home to the High Line and hundreds of art galleries.",                      challenge: "Walk the High Line and photograph the Hudson." },
-    "105": { name: "Midtown",                    info: "The bustling center of Manhattan, including Times Square.",                  challenge: "Capture Times Square's neon glow." },
+    "104": { name: "Chelsea / Clinton",          info: "Home to the High Line and hundreds of art galleries. Strong real estate tied to Hudson Yards.",                      challenge: "Walk the High Line and photograph the Hudson." },
+    "105": { name: "Midtown",                    info: "The bustling center of Manhattan, including Times Square. Big economic engine of NYC!",                  challenge: "Capture Times Square's neon glow." },
     "106": { name: "Stuyvesant Town / Turtle Bay", info: "A largely residential area near the United Nations.",                    challenge: "Photograph the UN building from the riverside." },
     "107": { name: "Upper West Side",            info: "A cultural hub near Lincoln Center and the Museum of Natural History.",     challenge: "Visit the Rose Center for Earth and Space." },
-    "108": { name: "Upper East Side",            info: "Known for the Museum Mile and upscale shopping.",                          challenge: "Walk along Museum Mile on Fifth Avenue." },
-    "109": { name: "Morningside Heights",        info: "Home to Columbia University and Riverside Park.",                          challenge: "Find the Cathedral of St. John the Divine." },
+    "108": { name: "Upper East Side",            info: "Known for the Museum Mile and upscale shopping. One of the wealthiest residential zones in the U.S.",                          challenge: "Walk along Museum Mile on Fifth Avenue." },
+    "109": { name: "Morningside Heights",        info: "Anchored by institutions such as Columbia University and home to Riverside Park.",                          challenge: "Find the Cathedral of St. John the Divine." },
     "110": { name: "Central Harlem",             info: "The historic epicenter of African American culture.",                      challenge: "Visit the Apollo Theater marquee." },
     "111": { name: "East Harlem",                info: "Also known as El Barrio, famous for its murals and street food.",          challenge: "Find a famous mural in El Barrio." },
     "112": { name: "Washington Heights / Inwood", info: "Home to The Met Cloisters and Highbridge Park.",                         challenge: "Photograph the George Washington Bridge from above." },
