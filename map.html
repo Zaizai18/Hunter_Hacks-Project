@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manhattan Unlocked</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="main-container">
+        
+        <div id="map"></div>
+
+        <div id="ui-panel">
+            <h1>Welcome to Manhattan Unlocked!</h1>
+            <div id="district-info">
+                <p>Select a district on the map to begin exploring.</p>
+            </div>
+
+            <div id="upload-section" class="hidden">
+                <hr>
+                <h3>Upload a photo:</h3>
+                <input type="file" id="photo-upload">
+                <br><br>
+                <button id="submit-btn">Unlock Next Area</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <script src="script.js"></script>
+</body>
+</html>
