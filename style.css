@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 /* Ensure the page takes up the full browser window */
 body, html {
     margin: 0;
@@ -70,6 +71,8 @@ h1 {
     display: none;
 }
 =======
+=======
+>>>>>>> cb47136bf20402ceb0148f6591f50d8d488d43fc
 /* ============================================================
    Manhattan Unlocked — style.css
    Merged: firebase (DM Serif Display + topbar) + frontend (hero + map layout)
@@ -157,7 +160,11 @@ html, body {
     position: relative;
     z-index: 1;
     padding: 14px 36px;
+<<<<<<< HEAD
     background: var(--gold);
+=======
+    background: #a4c9ab;
+>>>>>>> cb47136bf20402ceb0148f6591f50d8d488d43fc
     color: #fff;
     text-decoration: none;
     font-weight: 700;
@@ -173,7 +180,12 @@ html, body {
 }
 
 .button:hover, #start-btn:hover {
+<<<<<<< HEAD
     background: #e8951e;
+=======
+    background: #fff;
+    color: #a4c9ab;
+>>>>>>> cb47136bf20402ceb0148f6591f50d8d488d43fc
     transform: translateY(-3px);
 }
 
@@ -401,4 +413,7 @@ body.map-page {
 
 /* ── Utility ───────────────────────────────────────────────── */
 .hidden { display: none !important; }
+<<<<<<< HEAD
 >>>>>>> final
+=======
+>>>>>>> cb47136bf20402ceb0148f6591f50d8d488d43fc
