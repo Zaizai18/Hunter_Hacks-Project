@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manhattan Unlocked – Map</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="map-page">
+
+    <!-- Top bar -->
+    <header id="topbar">
+        <a href="index.html" id="topbar-back">← Back</a>
+        <div id="topbar-title">Manhattan Unlocked</div>
+        <div id="counter-wrap">
+            <span id="counter-num">0</span>
+            <span id="counter-label">/ 12 districts explored</span>
+        </div>
+        <div id="progress-track"><div id="progress-fill"></div></div>
+    </header>
+
+    <div class="main-container">
+        <div id="map"></div>
+
+        <div id="ui-panel">
+            <div id="district-info">
+
+                <!-- Default state -->
+                <div id="panel-default">
+                    <div class="panel-eyebrow">Start here</div>
+                    <h2 class="panel-title">Unlock Manhattan</h2>
+                    <p class="panel-body">The <strong>Financial District</strong> is your starting point — it's already unlocked! Click it to see local spots, then upload a photo taken there to unlock adjacent neighborhoods.</p>
+
+                    <div id="hover-preview" class="hidden">
+                        <hr class="panel-divider">
+                        <div class="panel-eyebrow">Hovering</div>
+                        <div id="hover-preview-name" class="hover-preview-name"></div>
+                        <p id="hover-preview-info" class="panel-body" style="margin-bottom:0"></p>
+                    </div>
+
+                    <div class="legend-wrap">
+                        <div class="legend-item"><span class="legend-dot dot-start"></span> Starting point (FiDi)</div>
+                        <div class="legend-item"><span class="legend-dot dot-unlocked"></span> Unlocked</div>
+                        <div class="legend-item"><span class="legend-dot dot-available"></span> Available to unlock</div>
+                        <div class="legend-item"><span class="legend-dot dot-locked"></span> Locked</div>
+                    </div>
+                </div>
+
+                <!-- Selected district state -->
+                <div id="panel-selected" class="hidden">
+                    <div class="panel-eyebrow" id="panel-status-label">Locked</div>
+                    <h2 class="panel-title" id="panel-district-name">—</h2>
+                    <p id="panel-description" class="panel-description"></p>
+
+                    <div id="panel-spots-list"></div>
+
+                    <div id="upload-section" class="hidden">
+                        <p class="panel-body upload-instruction">Upload a photo taken <strong>at this location</strong> to unlock it and open adjacent districts.</p>
+                        <label class="upload-label" for="photo-upload">
+                            <span class="upload-icon">↑</span>
+                            <span>Drop a photo or tap to browse</span>
+                            <span class="upload-hint">Must be geotagged at this district</span>
+                        </label>
+                        <input type="file" id="photo-upload" accept="image/*" capture="environment">
+                        <div id="file-chosen" class="hidden"></div>
+                        <div id="validation-status" class="hidden"></div>
+                        <button id="submit-btn" class="hidden">Verify &amp; Unlock</button>
+                    </div>
+                </div>
+
+                <!-- Congrats state -->
+                <div id="panel-congrats" class="hidden">
+                    <div class="congrats-burst">✦</div>
+                    <div class="panel-eyebrow">District Unlocked!</div>
+                    <h2 class="panel-title" id="congrats-district">—</h2>
+                    <p class="panel-body" id="congrats-body"></p>
+                    <div id="congrats-unlocked-list"></div>
+                    <button id="congrats-continue-btn">Continue Exploring →</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Firebase compat SDKs (fill in your config in public/js/firebase-config.js) -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="public/js/firebase-config.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,410 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "name": "9/11 Memorial & Museum", "description": "A powerful tribute to the victims of the 2001 attacks, built on the original WTC footprints.", "BoroCD": "101", "type": "Historic" },
+      "geometry": { "type": "Point", "coordinates": [-74.0134, 40.7115] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Wall Street & NYSE", "description": "The financial heart of the world — home to the New York Stock Exchange since 1817.", "BoroCD": "101", "type": "Business" },
+      "geometry": { "type": "Point", "coordinates": [-74.0113, 40.7069] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Battery Park", "description": "A 25-acre waterfront park with harbor views and the ferry to the Statue of Liberty.", "BoroCD": "101", "type": "Park" },
+      "geometry": { "type": "Point", "coordinates": [-74.0170, 40.7033] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "The Oculus", "description": "Santiago Calatrava's iconic transportation hub — a stunning piece of public architecture.", "BoroCD": "101", "type": "Arts" },
+      "geometry": { "type": "Point", "coordinates": [-74.0131, 40.7127] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Charging Bull", "description": "Arturo Di Modica's famous bronze sculpture symbolizing financial optimism and strength.", "BoroCD": "101", "type": "Arts" },
+      "geometry": { "type": "Point", "coordinates": [-74.0134, 40.7056] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "South Street Seaport / Pier 17", "description": "Historic seaport with tall ships, rooftop concerts, and some of NYC's oldest cobblestone streets.", "BoroCD": "101", "type": "Tourism" },
+      "geometry": { "type": "Point", "coordinates": [-74.0031, 40.7065] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Fraunces Tavern", "description": "A Revolutionary War landmark where George Washington bid farewell to his officers in 1783.", "BoroCD": "101", "type": "Historic" },
+      "geometry": { "type": "Point", "coordinates": [-74.0115, 40.7034] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Stone Street Historic District", "description": "NYC's oldest paved street, now a lively outdoor dining corridor lined with 19th-century buildings.", "BoroCD": "101", "type": "Community" },
+      "geometry": { "type": "Point", "coordinates": [-74.0108, 40.7046] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Washington Square Park", "description": "The cultural heart of Greenwich Village — a gathering place for artists, students, and chess players.", "BoroCD": "102", "type": "Community" },
+      "geometry": { "type": "Point", "coordinates": [-73.9973, 40.7308] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "The Stonewall Inn", "description": "Birthplace of the modern LGBTQ+ rights movement and a National Monument.", "BoroCD": "102", "type": "Historic" },
+      "geometry": { "type": "Point", "coordinates": [-74.0021, 40.7335] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Blue Note Jazz Club", "description": "Legendary jazz venue that has hosted Miles Davis, Dizzy Gillespie, and countless greats since 1981.", "BoroCD": "102", "type": "Arts" },
+      "geometry": { "type": "Point", "coordinates": [-74.0007, 40.7302] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "SoHo Cast Iron District", "description": "The world's largest collection of cast-iron architecture, now home to galleries and boutiques.", "BoroCD": "102", "type": "Arts" },
+      "geometry": { "type": "Point", "coordinates": [-74.0014, 40.7237] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Comedy Cellar", "description": "NYC's most famous comedy club — where legends like Dave Chappelle still drop in unannounced.", "BoroCD": "102", "type": "Arts" },
+      "geometry": { "type": "Point", "coordinates": [-74.0002, 40.7295] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Meatpacking District", "description": "A trendy neighborhood of boutiques, rooftop bars, and the cobblestone streets where the High Line begins.", "BoroCD": "102", "type": "Community" },
+      "geometry": { "type": "Point", "coordinates": [-74.0072, 40.7397] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Magnolia Bakery (Original)", "description": "The Bleecker Street bakery that sparked NYC's cupcake craze — as seen on Sex and the City.", "BoroCD": "102", "type": "Food" },
+      "geometry": { "type": "Point", "coordinates": [-74.0037, 40.7321] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "East River Park", "description": "Waterfront park with sports fields, running paths, and views of the Williamsburg Bridge.", "BoroCD": "103", "type": "Park" },
+      "geometry": { "type": "Point", "coordinates": [-73.9743, 40.7187] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Tenement Museum", "description": "Step inside 19th-century immigrant apartments and hear the real stories of New York's arrivals.", "BoroCD": "103", "type": "Historic" },
+      "geometry": { "type": "Point", "coordinates": [-73.9897, 40.7183] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Katz's Delicatessen", "description": "An NYC institution since 1888 — legendary pastrami sandwiches and the 'I'll have what she's having' table.", "BoroCD": "103", "type": "Food" },
+      "geometry": { "type": "Point", "coordinates": [-73.9879, 40.7223] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "New Museum", "description": "The only dedicated contemporary art museum on the Bowery, known for bold and unconventional exhibitions.", "BoroCD": "103", "type": "Arts" },
+      "geometry": { "type": "Point", "coordinates": [-73.9936, 40.7224] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Mott Street (Chinatown)", "description": "The main artery of Manhattan Chinatown — packed with dim sum restaurants, herbal shops, and bakeries.", "BoroCD": "103", "type": "Community" },
+      "geometry": { "type": "Point", "coordinates": [-73.9974, 40.7150] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Eldridge Street Synagogue", "description": "A stunning 1887 Moorish synagogue — a landmark of Jewish immigrant life on the Lower East Side.", "BoroCD": "103", "type": "Historic" },
+      "geometry": { "type": "Point", "coordinates": [-73.9939, 40.7136] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Sara D. Roosevelt Park", "description": "A beloved community park stretching through the LES, hosting farmers markets and cultural events.", "BoroCD": "103", "type": "Community" },
+      "geometry": { "type": "Point", "coordinates": [-73.9947, 40.7197] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "The High Line", "description": "An elevated linear park built on a historic freight rail line, with art installations and great city views.", "BoroCD": "104", "type": "Park" },
+      "geometry": { "type": "Point", "coordinates": [-74.0047, 40.7480] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Chelsea Market", "description": "A vibrant food hall and shopping complex inside the former National Biscuit Company factory.", "BoroCD": "104", "type": "Food" },
+      "geometry": { "type": "Point", "coordinates": [-74.0074, 40.7424] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Chelsea Galleries District", "description": "Over 200 galleries around West 24th–26th Streets — the epicenter of the NYC contemporary art world.", "BoroCD": "104", "type": "Arts" },
+      "geometry": { "type": "Point", "coordinates": [-74.0004, 40.7460] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Hell's Kitchen Restaurant Row", "description": "West 46th Street is packed with dozens of restaurants from every cuisine — a favorite pre-theater spot.", "BoroCD": "104", "type": "Food" },
+      "geometry": { "type": "Point", "coordinates": [-73.9939, 40.7598] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Intrepid Sea, Air & Space Museum", "description": "A retired aircraft carrier turned museum, featuring a space shuttle and Cold War submarine.", "BoroCD": "104", "type": "Tourism" },
+      "geometry": { "type": "Point", "coordinates": [-74.0007, 40.7645] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Rubin Museum of Art", "description": "The world's premier museum of Himalayan art — a hidden gem showcasing Tibetan and Buddhist culture.", "BoroCD": "104", "type": "Arts" },
+      "geometry": { "type": "Point", "coordinates": [-74.0003, 40.7411] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Chelsea Piers", "description": "A massive sports and entertainment complex on the Hudson — skating, golf, gymnastics, and more.", "BoroCD": "104", "type": "Community" },
+      "geometry": { "type": "Point", "coordinates": [-74.0075, 40.7476] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Times Square", "description": "The crossroads of the world — neon lights, Broadway marquees, and the famous New Year's Eve ball drop.", "BoroCD": "105", "type": "Tourism" },
+      "geometry": { "type": "Point", "coordinates": [-73.9855, 40.7580] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Rockefeller Center", "description": "Art Deco complex with the iconic ice rink, Top of the Rock observation deck, and 30 Rock.", "BoroCD": "105", "type": "Tourism" },
+      "geometry": { "type": "Point", "coordinates": [-73.9786, 40.7587] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Museum of Modern Art (MoMA)", "description": "Home to Van Gogh's Starry Night, Warhol's soup cans, and one of the world's greatest modern art collections.", "BoroCD": "105", "type": "Arts" },
+      "geometry": { "type": "Point", "coordinates": [-73.9776, 40.7614] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Grand Central Terminal", "description": "A Beaux-Arts masterpiece — the celestial ceiling, whispering gallery, and the world's largest train station.", "BoroCD": "105", "type": "Historic" },
+      "geometry": { "type": "Point", "coordinates": [-73.9772, 40.7527] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Bryant Park", "description": "A beloved Midtown green space hosting free movies, winter skating, and the NYC Book Festival.", "BoroCD": "105", "type": "Community" },
+      "geometry": { "type": "Point", "coordinates": [-73.9840, 40.7536] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Empire State Building", "description": "NYC's most iconic skyscraper — visit the observatory for a 360° view of all five boroughs.", "BoroCD": "105", "type": "Tourism" },
+      "geometry": { "type": "Point", "coordinates": [-73.9857, 40.7484] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Carnegie Hall", "description": "The world's most famous concert hall — a National Historic Landmark that has hosted every great musician since 1891.", "BoroCD": "105", "type": "Arts" },
+      "geometry": { "type": "Point", "coordinates": [-73.9799, 40.7651] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "New York Public Library (Main Branch)", "description": "The Beaux-Arts 'Temple of Knowledge' on 42nd St, guarded by the famous lion statues Patience and Fortitude.", "BoroCD": "105", "type": "Community" },
+      "geometry": { "type": "Point", "coordinates": [-73.9822, 40.7527] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Radio City Music Hall", "description": "The 'Showplace of the Nation' — a spectacular Art Deco interior and home of the Rockettes.", "BoroCD": "105", "type": "Arts" },
+      "geometry": { "type": "Point", "coordinates": [-73.9800, 40.7599] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "United Nations Headquarters", "description": "The global hub of international diplomacy, sitting on international territory along the East River.", "BoroCD": "106", "type": "Historic" },
+      "geometry": { "type": "Point", "coordinates": [-73.9669, 40.7489] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Tudor City", "description": "A 1920s residential enclave with Gothic architecture — a quiet, photogenic escape from Midtown.", "BoroCD": "106", "type": "Historic" },
+      "geometry": { "type": "Point", "coordinates": [-73.9703, 40.7514] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Stuyvesant Town Community Garden", "description": "Greenery and community gathering space inside one of NYC's largest residential communities.", "BoroCD": "106", "type": "Community" },
+      "geometry": { "type": "Point", "coordinates": [-73.9770, 40.7320] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Chrysler Building", "description": "The art-deco crown jewel of the Manhattan skyline — still one of the most beautiful buildings ever built.", "BoroCD": "106", "type": "Arts" },
+      "geometry": { "type": "Point", "coordinates": [-73.9754, 40.7516] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Japan Society", "description": "A cultural bridge between the US and Japan — exhibitions, films, and performing arts in a serene space.", "BoroCD": "106", "type": "Arts" },
+      "geometry": { "type": "Point", "coordinates": [-73.9686, 40.7522] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Lincoln Center for the Performing Arts", "description": "The world's leading performing arts complex — home to the Met Opera, NY Philharmonic, and NYC Ballet.", "BoroCD": "107", "type": "Arts" },
+      "geometry": { "type": "Point", "coordinates": [-73.9832, 40.7725] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "American Museum of Natural History", "description": "One of the world's greatest natural history museums — dinosaurs, blue whale, and the Hayden Planetarium.", "BoroCD": "107", "type": "Tourism" },
+      "geometry": { "type": "Point", "coordinates": [-73.9742, 40.7813] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Riverside Park", "description": "A scenic 4-mile park along the Hudson River with Grant's Tomb and cherry blossom walks.", "BoroCD": "107", "type": "Park" },
+      "geometry": { "type": "Point", "coordinates": [-73.9893, 40.7922] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Zabar's", "description": "An iconic Upper West Side deli and food market since 1934 — the smoked salmon is legendary.", "BoroCD": "107", "type": "Food" },
+      "geometry": { "type": "Point", "coordinates": [-73.9818, 40.7840] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "New-York Historical Society", "description": "NYC's oldest museum — 4 million objects tell the full story of New York and American history.", "BoroCD": "107", "type": "Historic" },
+      "geometry": { "type": "Point", "coordinates": [-73.9764, 40.7790] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Soldiers' & Sailors' Monument", "description": "A stunning marble Civil War memorial at 89th and Riverside Drive, overlooking the Hudson.", "BoroCD": "107", "type": "Historic" },
+      "geometry": { "type": "Point", "coordinates": [-73.9861, 40.7857] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "The Metropolitan Museum of Art", "description": "The largest art museum in the Americas — 2 million works spanning 5,000 years of human creativity.", "BoroCD": "108", "type": "Arts" },
+      "geometry": { "type": "Point", "coordinates": [-73.9632, 40.7794] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Solomon R. Guggenheim Museum", "description": "Frank Lloyd Wright's spiral masterpiece houses a world-class collection of modern and contemporary art.", "BoroCD": "108", "type": "Arts" },
+      "geometry": { "type": "Point", "coordinates": [-73.9590, 40.7829] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Frick Collection", "description": "A Gilded Age mansion turned museum with Old Masters by Vermeer, Rembrandt, and El Greco.", "BoroCD": "108", "type": "Arts" },
+      "geometry": { "type": "Point", "coordinates": [-73.9668, 40.7713] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Gracie Mansion", "description": "The official residence of New York City's mayor — open for public tours in season.", "BoroCD": "108", "type": "Historic" },
+      "geometry": { "type": "Point", "coordinates": [-73.9440, 40.7745] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Museum Mile (5th Ave)", "description": "Nine world-class museums stretching from 82nd to 105th Street along Fifth Avenue.", "BoroCD": "108", "type": "Tourism" },
+      "geometry": { "type": "Point", "coordinates": [-73.9604, 40.7860] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Jewish Museum", "description": "The largest Jewish culture museum in the Western Hemisphere, in a stunning French Gothic mansion.", "BoroCD": "108", "type": "Arts" },
+      "geometry": { "type": "Point", "coordinates": [-73.9578, 40.7855] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Cooper Hewitt Design Museum", "description": "The nation's design museum — housed in the Carnegie Mansion, with interactive design exhibits.", "BoroCD": "108", "type": "Arts" },
+      "geometry": { "type": "Point", "coordinates": [-73.9571, 40.7837] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Columbia University", "description": "One of the world's top Ivy League universities — the historic Low Plaza is open to visitors.", "BoroCD": "109", "type": "Community" },
+      "geometry": { "type": "Point", "coordinates": [-73.9626, 40.8075] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Cathedral of St. John the Divine", "description": "The largest Gothic cathedral in the world — still under construction after 130 years.", "BoroCD": "109", "type": "Historic" },
+      "geometry": { "type": "Point", "coordinates": [-73.9614, 40.8038] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Riverside Church", "description": "A towering interdenominational church known for social justice activism and stunning city views.", "BoroCD": "109", "type": "Community" },
+      "geometry": { "type": "Point", "coordinates": [-73.9636, 40.8095] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Hamilton Grange National Memorial", "description": "The restored home of Founding Father Alexander Hamilton — a free national monument in St. Nicholas Park.", "BoroCD": "109", "type": "Historic" },
+      "geometry": { "type": "Point", "coordinates": [-73.9495, 40.8197] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Grant's Tomb", "description": "The largest mausoleum in North America — the final resting place of President Ulysses S. Grant and his wife.", "BoroCD": "109", "type": "Historic" },
+      "geometry": { "type": "Point", "coordinates": [-73.9636, 40.8122] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Apollo Theater", "description": "The legendary Harlem stage where James Brown, Ella Fitzgerald, and Michael Jackson launched their careers.", "BoroCD": "110", "type": "Arts" },
+      "geometry": { "type": "Point", "coordinates": [-73.9499, 40.8100] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Studio Museum in Harlem", "description": "The premier institution dedicated to artists of African descent and the art of the African diaspora.", "BoroCD": "110", "type": "Arts" },
+      "geometry": { "type": "Point", "coordinates": [-73.9498, 40.8101] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Marcus Garvey Park", "description": "Historic Harlem park with the city's only remaining 19th-century fire watchtower and summer concerts.", "BoroCD": "110", "type": "Community" },
+      "geometry": { "type": "Point", "coordinates": [-73.9437, 40.8063] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Sylvia's Restaurant", "description": "The 'Queen of Soul Food' — a Harlem institution since 1962, famous for fried chicken and Sunday gospel brunch.", "BoroCD": "110", "type": "Food" },
+      "geometry": { "type": "Point", "coordinates": [-73.9449, 40.8114] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Abyssinian Baptist Church", "description": "One of the oldest and most influential African American churches in the US, founded in 1808.", "BoroCD": "110", "type": "Community" },
+      "geometry": { "type": "Point", "coordinates": [-73.9487, 40.8118] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Strivers' Row (King Model Houses)", "description": "Magnificent 1890s townhouses where Harlem Renaissance figures like W.C. Handy and Eubie Blake lived.", "BoroCD": "110", "type": "Historic" },
+      "geometry": { "type": "Point", "coordinates": [-73.9492, 40.8149] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Langston Hughes House", "description": "The Harlem brownstone where the poet laureate of the Harlem Renaissance lived for the last 20 years of his life.", "BoroCD": "110", "type": "Historic" },
+      "geometry": { "type": "Point", "coordinates": [-73.9437, 40.8137] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "El Museo del Barrio", "description": "New York's leading Latino cultural institution — celebrating Caribbean and Latin American art and culture.", "BoroCD": "111", "type": "Arts" },
+      "geometry": { "type": "Point", "coordinates": [-73.9516, 40.7927] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Graffiti Hall of Fame", "description": "An outdoor gallery on Park Avenue since 1980 — a pilgrimage site for street art lovers worldwide.", "BoroCD": "111", "type": "Arts" },
+      "geometry": { "type": "Point", "coordinates": [-73.9375, 40.8001] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "La Marqueta", "description": "A historic covered market under the Park Ave viaduct, connecting East Harlem's Latino community since 1936.", "BoroCD": "111", "type": "Community" },
+      "geometry": { "type": "Point", "coordinates": [-73.9385, 40.7980] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Thomas Jefferson Park", "description": "A neighborhood park and community hub along the East River with a public pool and athletic fields.", "BoroCD": "111", "type": "Park" },
+      "geometry": { "type": "Point", "coordinates": [-73.9351, 40.7946] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Rao's Restaurant", "description": "The most impossible reservation in NYC — a tiny, unchanged 1896 red-sauce institution in East Harlem.", "BoroCD": "111", "type": "Food" },
+      "geometry": { "type": "Point", "coordinates": [-73.9365, 40.7963] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Union Settlement", "description": "One of East Harlem's oldest community organizations — providing education and social services since 1895.", "BoroCD": "111", "type": "Community" },
+      "geometry": { "type": "Point", "coordinates": [-73.9372, 40.7994] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "The Met Cloisters", "description": "The Metropolitan Museum's medieval branch — a reconstructed 12th-century monastery with unicorn tapestries.", "BoroCD": "112", "type": "Arts" },
+      "geometry": { "type": "Point", "coordinates": [-73.9314, 40.8648] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Fort Tryon Park", "description": "A hilltop park with the best views of the Hudson River and New Jersey Palisades, plus beautiful gardens.", "BoroCD": "112", "type": "Park" },
+      "geometry": { "type": "Point", "coordinates": [-73.9329, 40.8595] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "George Washington Bridge", "description": "The world's busiest motor vehicle bridge — walk or bike across for spectacular views of the Hudson.", "BoroCD": "112", "type": "Tourism" },
+      "geometry": { "type": "Point", "coordinates": [-73.9512, 40.8517] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Inwood Hill Park", "description": "Manhattan's last remaining old-growth forest with ancient caves once used by the Lenape people.", "BoroCD": "112", "type": "Park" },
+      "geometry": { "type": "Point", "coordinates": [-73.9292, 40.8709] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Dyckman Farmhouse Museum", "description": "Manhattan's only surviving Dutch Colonial farmhouse, dating to 1784 — a free community museum.", "BoroCD": "112", "type": "Historic" },
+      "geometry": { "type": "Point", "coordinates": [-73.9279, 40.8656] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Little Red Lighthouse", "description": "A beloved 1921 lighthouse under the George Washington Bridge — made famous by a classic children's book.", "BoroCD": "112", "type": "Historic" },
+      "geometry": { "type": "Point", "coordinates": [-73.9527, 40.8518] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Bennett Park", "description": "The highest natural point in Manhattan — the site of the 1776 Battle of Fort Washington.", "BoroCD": "112", "type": "Historic" },
+      "geometry": { "type": "Point", "coordinates": [-73.9355, 40.8518] }
+    }
+  ]
+}
