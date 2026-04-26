@@ -339,6 +339,43 @@ html, body {
     to   { transform: translateX(0);     opacity: 1; }
 }
 
+/* ── Locations list ───────────────────────────────────────── */
+.locations-section {
+    margin-top: 20px;
+    border-top: 1px solid var(--paper-dark);
+    padding-top: 16px;
+}
+
+.locations-title {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+}
+
+.location-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 6px;
+    background: var(--paper-dark);
+    margin-bottom: 6px;
+    font-size: 11px;
+}
+
+.location-item-name {
+    font-weight: 500;
+    color: var(--ink);
+}
+
+.location-item-desc {
+    color: #777770;
+    font-size: 10px;
+    margin-top: 2px;
+}
+
 /* ── Tooltip ──────────────────────────────────────────────── */
 .district-label {
     font-family: var(--mono) !important;

@@ -15,7 +15,6 @@ const districtNames = {
     "112": "Washington Heights / Inwood"
 };
 
-// ─── District data (name + description) ──────────────────────────────────────
 const districtData = {
     "101": { name: "Financial District & Battery Park City", info: "The historic heart of NYC and home to Wall Street. Start your Manhattan journey here." },
     "102": { name: "Greenwich Village & SoHo",              info: "Famous for its jazz clubs, cafes, and Washington Square Park." },
@@ -33,6 +32,17 @@ const districtData = {
 };
 
 function dName(id) { return districtData[String(id)]?.name || `District ${id}`; }
+
+// Unique color per district (used when district is unlocked/completed)
+function getColor(id) {
+    const colors = {
+        "101": "#e74c3c", "102": "#9b59b6", "103": "#2ecc71",
+        "104": "#f39c12", "105": "#1abc9c", "106": "#34495e",
+        "107": "#d35400", "108": "#7f8c8d", "109": "#c0392b",
+        "110": "#16a085", "111": "#27ae60", "112": "#2980b9"
+    };
+    return colors[id] || "#3498db";
+}
 
 // ─── Adjacency map ────────────────────────────────────────────────────────────
 const adjacency = {
@@ -78,7 +88,7 @@ function saveState(state) {
 
 let state = loadState();
 let geojsonLayer;
-let layerMap = {};         // BoroCD → Leaflet layer
+let layerMap = {};
 let selectedDistrictId = null;
 
 // ─── Firebase auth ────────────────────────────────────────────────────────────
@@ -110,7 +120,6 @@ async function syncDistrictsFromBackend() {
     try {
         const res = await fetch(`${BACKEND_URL}/districts/${currentUid}`);
         const backendDistricts = await res.json();
-        // Merge backend district state into local state
         Object.entries(backendDistricts).forEach(([districtName, info]) => {
             const id = Object.keys(districtNames).find(k => districtNames[k] === districtName);
             if (!id) return;
@@ -131,8 +140,6 @@ async function syncDistrictsFromBackend() {
 }
 
 // ─── Map setup ────────────────────────────────────────────────────────────────
-const manhattanBounds = [[40.68, -74.05], [40.89, -73.88]];
-
 const map = L.map('map', {
     maxBounds: [[40.68, -74.05], [40.89, -73.88]],
     maxBoundsViscosity: 1.0,
@@ -145,30 +152,38 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_matter/{z}/{x}/{y}{r}.png', 
     maxZoom: 20
 }).addTo(map);
 
+// ─── Locations ────────────────────────────────────────────────────────────────
+let allLocations = [];
+const markerGroup = L.layerGroup().addTo(map);
+
+fetch('locations.json')
+    .then(res => res.json())
+    .then(data => { allLocations = data.features || []; })
+    .catch(err => console.error("Error loading locations:", err));
+
 // ─── District style logic ─────────────────────────────────────────────────────
 
 function getDistrictStyle(id) {
     const sid = String(id);
     if (state.completedDistricts.includes(sid)) {
-        return { color: "#2e5c3a", weight: 2, fillColor: "#4a7c59", fillOpacity: 0.65 };
+        return { color: getColor(sid), weight: 2, fillColor: getColor(sid), fillOpacity: 0.35 };
     }
     if (state.unlockedDistricts.includes(sid)) {
         if (sid === "101" && state.completedDistricts.length === 0 && (state.visitCounts["101"] || 0) === 0) {
-            // Starting district, not yet visited — gold
-            return { color: "#8a6218", weight: 2.5, fillColor: "#c8972a", fillOpacity: 0.55 };
+            return { color: "#c8972a", weight: 2.5, fillColor: "#c8972a", fillOpacity: 0.25 };
         }
-        return { color: "#2e5c3a", weight: 2, fillColor: "#76a889", fillOpacity: 0.45 };
+        return { color: getColor(sid), weight: 1.5, fillColor: getColor(sid), fillOpacity: 0.2 };
     }
-    return { color: "#8a867c", weight: 1, fillColor: "#b0aba0", fillOpacity: 0.5 };
+    return { color: "#8a867c", weight: 1, fillColor: "#b0aba0", fillOpacity: 0.15 };
 }
 
 function getHoverStyle(id) {
     const sid = String(id);
     const isLocked = !state.unlockedDistricts.includes(sid);
     if (isLocked) {
-        return { weight: 2, color: "#8a867c", fillColor: "#999490", fillOpacity: 0.6 };
+        return { weight: 2, color: "#aaa", fillColor: "#b0aba0", fillOpacity: 0.3 };
     }
-    return { weight: 3, color: "#1a3a24", fillColor: "#3a6a49", fillOpacity: 0.8 };
+    return { weight: 2.5, color: getColor(sid), fillColor: getColor(sid), fillOpacity: 0.5 };
 }
 
 // ─── Counter ──────────────────────────────────────────────────────────────────
@@ -178,7 +193,7 @@ function updateCounter() {
     const el = document.getElementById('counter-num');
     el.textContent = count;
     el.classList.remove('counter-pop');
-    void el.offsetWidth; // reflow to restart animation
+    void el.offsetWidth;
     el.classList.add('counter-pop');
     document.getElementById('progress-fill').style.width = `${(count / 12) * 100}%`;
 }
@@ -192,7 +207,6 @@ function showDefaultPanel() {
 }
 
 function showSelectedPanel(id) {
-    // Swap panel first so a state error never leaves the default panel stuck
     document.getElementById('panel-default').classList.add('hidden');
     document.getElementById('panel-congrats').classList.add('hidden');
     document.getElementById('panel-selected').classList.remove('hidden');
@@ -218,7 +232,6 @@ function showSelectedPanel(id) {
     descEl.textContent = info;
     descEl.classList.toggle('hidden', !info);
 
-    // Visit count pills
     const pillsEl = document.getElementById('panel-visit-count');
     pillsEl.innerHTML = '';
     if (isUnlocked) {
@@ -263,6 +276,64 @@ function showSelectedPanel(id) {
     } else {
         uploadSection.classList.add('hidden');
     }
+
+    // Show locations for this district
+    renderDistrictLocations(sid);
+}
+
+const typeIcon = {
+    "Tourism":  "🗺",
+    "Arts":     "🎨",
+    "Community":"🤝",
+    "Food":     "🍽",
+    "Park":     "🌿",
+    "Historic": "🏛",
+    "Business": "💼"
+};
+
+function renderDistrictLocations(sid) {
+    markerGroup.clearLayers();
+
+    const spots = allLocations.filter(f => String(f.properties.BoroCD).trim() === sid);
+
+    // Inject locations list below the upload section
+    const panel = document.getElementById('panel-selected');
+    let locSection = panel.querySelector('.locations-section');
+    if (!locSection) {
+        locSection = document.createElement('div');
+        locSection.className = 'locations-section';
+        panel.appendChild(locSection);
+    }
+
+    if (spots.length === 0) {
+        locSection.innerHTML = '';
+        return;
+    }
+
+    spots.forEach(spot => {
+        const [lng, lat] = spot.geometry.coordinates;
+        const icon = typeIcon[spot.properties.type] || '📍';
+        const marker = L.marker([lat, lng], {
+            icon: L.divIcon({
+                html: `<div style="font-size:20px;line-height:1;filter:drop-shadow(0 1px 3px rgba(0,0,0,0.5))">${icon}</div>`,
+                className: '',
+                iconSize: [24, 24],
+                iconAnchor: [12, 12]
+            })
+        }).bindPopup(`<strong>${spot.properties.name}</strong><br><em style="color:#888;font-size:11px">${spot.properties.type}</em><br>${spot.properties.description || ''}`);
+        markerGroup.addLayer(marker);
+    });
+
+    locSection.innerHTML = `<div class="locations-title">Spots to visit (${spots.length})</div>` +
+        spots.map(spot => `
+            <div class="location-item">
+                <span style="font-size:16px;flex-shrink:0">${typeIcon[spot.properties.type] || '📍'}</span>
+                <div>
+                    <div class="location-item-name">${spot.properties.name}</div>
+                    ${spot.properties.description ? `<div class="location-item-desc">${spot.properties.description}</div>` : ''}
+                </div>
+            </div>
+        `).join('');
 }
 
 function showCongratsPanel(districtId, newlyUnlocked) {
@@ -318,7 +389,6 @@ async function handleCheckIn() {
     const sid = String(selectedDistrictId);
 
     if (currentUid && BACKEND_URL !== "YOUR_CLOUD_RUN_URL") {
-        // Use real Firebase backend
         try {
             const formData = new FormData();
             formData.append("image", file);
@@ -334,7 +404,6 @@ async function handleCheckIn() {
             return;
         }
     } else {
-        // Demo mode — always approves after a short delay
         await new Promise(r => setTimeout(r, 1200));
         result = { approved: true, message: "Check-in approved! (demo mode)" };
     }
@@ -347,7 +416,6 @@ async function handleCheckIn() {
         return;
     }
 
-    // Update local state
     if (!state.visitCounts[sid]) state.visitCounts[sid] = 0;
     state.visitCounts[sid]++;
 
@@ -407,7 +475,6 @@ fetch('manhattan_districts.json')
                         if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
                             e.target.bringToFront();
                         }
-                        // Show description preview in default panel when nothing is selected
                         if (!selectedDistrictId && entry.info) {
                             const defaultPanel = document.getElementById('panel-default');
                             if (!defaultPanel.classList.contains('hidden')) {
