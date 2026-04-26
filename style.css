@@ -19,14 +19,121 @@
     --mono:  'DM Mono', 'Courier New', monospace;
 }
 
-html, body {
-    height: 100%;
-    width: 100%;
-    overflow: hidden;
-    background: var(--paper);
-    color: var(--ink);
+html {
+    scroll-behavior: smooth;
+}
+
+body {
     font-family: var(--mono);
     font-size: 13px;
+    background: var(--paper);
+    color: var(--ink);
+}
+
+/* ── Landing page ─────────────────────────────────────────── */
+.hero-section {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.hero-section img {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 120%;
+    object-fit: cover;
+    pointer-events: none;
+    transform: translateZ(0);
+    filter: brightness(0.45);
+    will-change: top;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 0 24px;
+}
+
+.hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0;
+    transform: translateY(12px);
+    animation: hero-fade 0.7s 0.2s ease forwards;
+}
+
+.hero-title {
+    font-family: var(--serif);
+    font-size: clamp(42px, 8vw, 88px);
+    color: #fff;
+    line-height: 1.05;
+    opacity: 0;
+    transform: translateY(16px);
+    animation: hero-fade 0.8s 0.45s ease forwards;
+}
+
+.hero-sub {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: rgba(255,255,255,0.65);
+    max-width: 420px;
+    line-height: 1.7;
+    opacity: 0;
+    transform: translateY(12px);
+    animation: hero-fade 0.8s 0.7s ease forwards;
+}
+
+.hero-divider {
+    width: 40px;
+    height: 2px;
+    background: var(--gold);
+    border: none;
+    opacity: 0;
+    animation: hero-fade 0.6s 0.6s ease forwards;
+}
+
+.start-btn {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 14px 40px;
+    background: var(--gold);
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(12px);
+    animation: hero-fade 0.8s 0.95s ease forwards;
+    transition: background 0.2s, transform 0.15s;
+}
+
+.start-btn:hover {
+    background: var(--gold-light);
+    transform: translateY(-1px);
+}
+
+@keyframes hero-fade {
+    to { opacity: 1; transform: translateY(0); }
 }
 
 /* ── Topbar ───────────────────────────────────────────────── */
@@ -39,7 +146,7 @@ html, body {
     display: flex;
     align-items: center;
     padding: 0 24px;
-    gap: 20px;
+    gap: 16px;
     z-index: 2000;
 }
 
@@ -86,10 +193,31 @@ html, body {
     transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* ── Topbar icon buttons (find-me, share) ─────────────────── */
+.topbar-btn {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: var(--paper);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    padding: 5px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s;
+    flex-shrink: 0;
+}
+
+.topbar-btn:hover {
+    background: rgba(255,255,255,0.16);
+}
+
 /* ── Layout ───────────────────────────────────────────────── */
 .main-container {
     display: flex;
     height: 100vh;
+    overflow: hidden;
     padding-top: var(--topbar-h);
 }
 
@@ -99,7 +227,6 @@ html, body {
     background: #1a1a2e;
 }
 
-/* Remove Leaflet's default black focus outline on district paths */
 .leaflet-interactive:focus {
     outline: none;
 }
@@ -117,7 +244,6 @@ html, body {
     z-index: 1000;
 }
 
-/* thin gold line accent at top of panel */
 #ui-panel::before {
     content: '';
     display: block;
@@ -127,6 +253,26 @@ html, body {
     border-radius: 2px;
     margin-bottom: 28px;
 }
+
+/* ── Back button ──────────────────────────────────────────── */
+#back-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: #888;
+    cursor: pointer;
+    padding: 0;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    transition: color 0.15s;
+}
+
+#back-btn:hover { color: var(--ink); }
 
 .panel-eyebrow {
     font-size: 10px;
@@ -151,7 +297,6 @@ html, body {
     margin-bottom: 24px;
 }
 
-/* ── District description ─────────────────────────────────── */
 .panel-description {
     font-size: 12px;
     line-height: 1.65;
@@ -163,7 +308,7 @@ html, body {
     border-radius: 0 4px 4px 0;
 }
 
-/* ── Hover preview (on default panel) ────────────────────── */
+/* ── Hover preview ────────────────────────────────────────── */
 .panel-divider {
     border: none;
     border-top: 1px solid var(--paper-dark);
@@ -224,9 +369,7 @@ html, body {
 .pill-extra   { background: var(--paper-dark); color: #666; border-color: #ccc; }
 
 /* ── Upload area ──────────────────────────────────────────── */
-#upload-section {
-    margin-top: 4px;
-}
+#upload-section { margin-top: 4px; }
 
 .upload-label {
     display: flex;
@@ -248,16 +391,8 @@ html, body {
     background: #fdf7ec;
 }
 
-.upload-icon {
-    font-size: 22px;
-    display: block;
-}
-
-.upload-hint {
-    font-size: 10px;
-    opacity: 0.6;
-    margin-top: 2px;
-}
+.upload-icon { font-size: 22px; display: block; }
+.upload-hint { font-size: 10px; opacity: 0.6; margin-top: 2px; }
 
 #photo-upload { display: none; }
 
@@ -286,18 +421,9 @@ html, body {
     transition: background 0.2s, transform 0.1s;
 }
 
-#submit-btn:hover, #congrats-continue-btn:hover {
-    background: #333;
-}
-
-#submit-btn:active, #congrats-continue-btn:active {
-    transform: scale(0.98);
-}
-
-#submit-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
+#submit-btn:hover, #congrats-continue-btn:hover { background: #333; }
+#submit-btn:active, #congrats-continue-btn:active { transform: scale(0.98); }
+#submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
 /* ── Congrats panel ───────────────────────────────────────── */
 .congrats-burst {
@@ -339,6 +465,38 @@ html, body {
     to   { transform: translateX(0);     opacity: 1; }
 }
 
+/* ── Spot type filter bar ─────────────────────────────────── */
+.filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 12px;
+}
+
+.filter-chip {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 3px 9px;
+    border-radius: 20px;
+    border: 1px solid var(--paper-dark);
+    background: var(--paper-dark);
+    color: #666;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+}
+
+.filter-chip:hover {
+    border-color: var(--gold);
+    color: var(--ink);
+}
+
+.filter-chip.active {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+}
+
 /* ── Locations list ───────────────────────────────────────── */
 .locations-section {
     margin-top: 20px;
@@ -363,7 +521,11 @@ html, body {
     background: var(--paper-dark);
     margin-bottom: 6px;
     font-size: 11px;
+    cursor: default;
+    transition: background 0.15s;
 }
+
+.location-item:hover { background: #dedad0; }
 
 .location-item-name {
     font-weight: 500;
@@ -374,6 +536,46 @@ html, body {
     color: #777770;
     font-size: 10px;
     margin-top: 2px;
+}
+
+/* ── Share toast ──────────────────────────────────────────── */
+#share-toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(60px);
+    background: var(--ink);
+    color: var(--paper);
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 10px 20px;
+    border-radius: 6px;
+    z-index: 3000;
+    opacity: 0;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+}
+
+#share-toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* ── Find-me pulse marker ─────────────────────────────────── */
+.user-location-marker {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #4a90e2;
+    border: 3px solid #fff;
+    box-shadow: 0 0 0 3px rgba(74,144,226,0.35);
+    animation: pulse-ring 1.8s ease infinite;
+}
+
+@keyframes pulse-ring {
+    0%   { box-shadow: 0 0 0 3px rgba(74,144,226,0.35); }
+    70%  { box-shadow: 0 0 0 10px rgba(74,144,226,0); }
+    100% { box-shadow: 0 0 0 3px rgba(74,144,226,0); }
 }
 
 /* ── Tooltip ──────────────────────────────────────────────── */
@@ -399,3 +601,33 @@ html, body {
 }
 
 .counter-pop { animation: pop 0.45s ease; }
+
+/* ── Mobile responsive ────────────────────────────────────── */
+@media (max-width: 768px) {
+    :root { --panel-w: 100%; }
+
+    #topbar-title { font-size: 15px; }
+    #progress-track { width: 70px; }
+    #counter-label { display: none; }
+
+    .topbar-btn span { display: none; }
+
+    .main-container {
+        flex-direction: column;
+    }
+
+    #map {
+        height: 52vh;
+        flex: none;
+    }
+
+    #ui-panel {
+        width: 100%;
+        height: 48vh;
+        border-left: none;
+        border-top: 1px solid var(--paper-dark);
+        padding: 16px 20px;
+    }
+
+    #ui-panel::before { display: none; }
+}
