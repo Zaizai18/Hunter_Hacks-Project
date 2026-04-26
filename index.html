@@ -4,30 +4,82 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manhattan Unlocked</title>
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+    <!-- Top bar counter -->
+    <header id="topbar">
+        <div id="topbar-title">Manhattan Unlocked</div>
+        <div id="counter-wrap">
+            
+            <span id="counter-num">0</span>
+            <span id="counter-label">/ 12 districts explored</span>
+        </div>
+        <div id="progress-track"><div id="progress-fill"></div></div>
+    </header>
+
     <div class="main-container">
-        
+
         <div id="map"></div>
 
         <div id="ui-panel">
-            <h1>Welcome to Manhattan Unlocked!</h1>
             <div id="district-info">
-                <p>Select a district on the map to begin exploring.</p>
+
+            <!-- Default state -->
+            <div id="panel-default">
+                <div class="panel-eyebrow">Start here</div>
+                <h2 class="panel-title">Unlock Manhattan</h2>
+                <p class="panel-body">Click the gold district on the map to begin. Upload a photo taken there to check in and unlock adjacent neighborhoods.</p>
+
+                <!-- Hover preview — updates as user mouses over districts -->
+                <div id="hover-preview" class="hidden">
+                    <hr class="panel-divider">
+                    <div class="panel-eyebrow">Hovering</div>
+                    <div id="hover-preview-name" class="hover-preview-name"></div>
+                    <p id="hover-preview-info" class="panel-body" style="margin-bottom:0"></p>
+                </div>
+
+                <div class="legend-wrap">
+                    <div class="legend-item"><span class="legend-dot dot-start"></span> Starting point</div>
+                    <div class="legend-item"><span class="legend-dot dot-unlocked"></span> Unlocked</div>
+                    <div class="legend-item"><span class="legend-dot dot-locked"></span> Locked</div>
+                </div>
             </div>
 
-            <div id="upload-section" class="hidden">
-                <hr>
-                <h3>Upload a photo:</h3>
-                <input type="file" id="photo-upload">
-                <br><br>
-                <button id="submit-btn">Unlock Next Area</button>
+            <!-- Selected district state -->
+            <div id="panel-selected" class="hidden">
+                <div class="panel-eyebrow" id="panel-status-label">Unlocked</div>
+                <h2 class="panel-title" id="panel-district-name">—</h2>
+                <p id="panel-description" class="panel-description"></p>
+                <div id="panel-visit-count" class="visit-pills"></div>
+                <p class="panel-body" id="panel-body-text"></p>
+
+                <div id="upload-section" class="hidden">
+                    <label class="upload-label" id="upload-label-text" for="photo-upload">
+                        <span class="upload-icon">↑</span>
+                        <span>Drop a photo or tap to browse</span>
+                        <span class="upload-hint">Must be taken at this location</span>
+                    </label>
+                    <input type="file" id="photo-upload" accept="image/*" capture="environment">
+                    <div id="file-chosen" class="hidden"></div>
+                    <button id="submit-btn" class="hidden">Verify &amp; Unlock</button>
+                </div>
             </div>
+
+            <!-- Congratulations state -->
+            <div id="panel-congrats" class="hidden">
+                <div class="congrats-burst">✦</div>
+                <div class="panel-eyebrow">Congratulations!</div>
+                <h2 class="panel-title" id="congrats-district">—</h2>
+                <p class="panel-body" id="congrats-body"></p>
+                <div id="congrats-unlocked-list"></div>
+                <button id="congrats-continue-btn">Continue Exploring →</button>
+            </div>
+
         </div>
     </div>
 
