@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manhattan Unlocked</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --community: #e8634a;
+            --art:        #b06fd8;
+            --finance:    #f0c040;
+            --bg:         #0e0e18;
+            --card-bg:    #16161f;
+            --text:       #f0ede8;
+            --muted:      #8a8a9a;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ── HERO ── */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            min-height: 100vh;
+            padding: 60px 24px 80px;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 60% 50% at 50% 0%, rgba(176,111,216,0.18) 0%, transparent 70%),
+                radial-gradient(ellipse 40% 40% at 20% 80%, rgba(232,99,74,0.14) 0%, transparent 60%),
+                radial-gradient(ellipse 40% 40% at 80% 80%, rgba(240,192,64,0.12) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .badge {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--art);
+            border: 1px solid rgba(176,111,216,0.4);
+            padding: 6px 16px;
+            border-radius: 100px;
+            margin-bottom: 32px;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(52px, 10vw, 110px);
+            font-weight: 900;
+            line-height: 1;
+            letter-spacing: -2px;
+            margin-bottom: 24px;
+        }
+
+        h1 span.manhattan { color: var(--text); }
+        h1 span.unlocked  {
+            background: linear-gradient(135deg, var(--community), var(--art), var(--finance));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-sub {
+            font-size: clamp(16px, 2.5vw, 20px);
+            color: var(--muted);
+            max-width: 540px;
+            line-height: 1.65;
+            margin-bottom: 48px;
+        }
+
+        .cta {
+            display: inline-block;
+            padding: 18px 48px;
+            background: linear-gradient(135deg, var(--community) 0%, var(--art) 60%, var(--finance) 120%);
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-decoration: none;
+            border-radius: 100px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 32px rgba(176,111,216,0.35);
+        }
+        .cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 40px rgba(176,111,216,0.5);
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            color: var(--muted);
+            font-size: 12px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            animation: bounce 2s infinite;
+        }
+        .scroll-hint svg { opacity: 0.5; }
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50%       { transform: translateX(-50%) translateY(6px); }
+        }
+
+        /* ── PILLARS ── */
+        .pillars {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2px;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px 120px;
+        }
+
+        .pillar {
+            background: var(--card-bg);
+            padding: 52px 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        .pillar:first-child { border-radius: 20px 0 0 20px; }
+        .pillar:last-child  { border-radius: 0 20px 20px 0; }
+        .pillar:hover { transform: translateY(-6px); z-index: 1; }
+
+        .pillar::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            border-radius: 2px 2px 0 0;
+        }
+        .pillar.community::after { background: var(--community); }
+        .pillar.art::after        { background: var(--art); }
+        .pillar.finance::after    { background: var(--finance); }
+
+        .pillar-icon {
+            font-size: 40px;
+            line-height: 1;
+        }
+
+        .pillar-label {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 700;
+        }
+        .pillar.community .pillar-label { color: var(--community); }
+        .pillar.art        .pillar-label { color: var(--art); }
+        .pillar.finance    .pillar-label { color: var(--finance); }
+
+        .pillar p {
+            color: var(--muted);
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        .pillar-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .tag {
+            font-size: 11px;
+            font-weight: 500;
+            padding: 4px 12px;
+            border-radius: 100px;
+            letter-spacing: 0.5px;
+        }
+        .pillar.community .tag { background: rgba(232,99,74,0.15);  color: var(--community); }
+        .pillar.art        .tag { background: rgba(176,111,216,0.15); color: var(--art); }
+        .pillar.finance    .tag { background: rgba(240,192,64,0.15);  color: var(--finance); }
+
+        /* ── FOOTER ── */
+        footer {
+            text-align: center;
+            padding: 40px 24px;
+            color: var(--muted);
+            font-size: 13px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+    </style>
+</head>
+<body>
+
+    <section class="hero">
+        <span class="badge">New York City</span>
+        <h1>
+            <span class="manhattan">Manhattan</span><br>
+            <span class="unlocked">Unlocked</span>
+        </h1>
+        <p class="hero-sub">
+            Step outside. Discover the people, culture, and pulse that make each Manhattan district its own world.
+        </p>
+        <a href="index.html" class="cta">Start Exploring</a>
+
+        <div class="scroll-hint">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M8 3v10M4 9l4 4 4-4"/>
+            </svg>
+            scroll
+        </div>
+    </section>
+
+    <section class="pillars">
+
+        <div class="pillar community">
+            <div class="pillar-icon">🤝</div>
+            <div class="pillar-label">Community</div>
+            <p>
+                Every block has a story. Meet the neighborhoods that built Manhattan — from Harlem block parties to Washington Heights block gardens.
+            </p>
+            <div class="pillar-tags">
+                <span class="tag">Neighborhoods</span>
+                <span class="tag">Local Events</span>
+                <span class="tag">History</span>
+            </div>
+        </div>
+
+        <div class="pillar art">
+            <div class="pillar-icon">🎨</div>
+            <div class="pillar-label">Art</div>
+            <p>
+                From Chelsea's gallery rows to El Barrio's murals, Manhattan is an open-air museum. Unlock the spots where creativity lives.
+            </p>
+            <div class="pillar-tags">
+                <span class="tag">Murals</span>
+                <span class="tag">Galleries</span>
+                <span class="tag">Performance</span>
+            </div>
+        </div>
+
+        <div class="pillar finance">
+            <div class="pillar-icon">🏙️</div>
+            <div class="pillar-label">Finance</div>
+            <p>
+                The Financial District shaped the modern world. Walk the streets where fortunes were made, institutions were born, and history was written.
+            </p>
+            <div class="pillar-tags">
+                <span class="tag">Wall Street</span>
+                <span class="tag">Architecture</span>
+                <span class="tag">Landmarks</span>
+            </div>
+        </div>
+
+    </section>
+
+    <footer>
+        &copy; 2026 Manhattan Unlocked &mdash; Explore the island, one district at a time.
+    </footer>
+
+</body>
+</html>

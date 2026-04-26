@@ -100,18 +100,21 @@ function updateMapColors() {
 }
 
 // 3. HOVER FUNCTIONS (Must be defined before fetch)
+const PILLAR_COLORS = ['#e8634a', '#b06fd8', '#f0c040'];
+
 function highlightFeature(e) {
     var layer = e.target;
+    const id = layer.feature.properties.BoroCD?.toString();
+    const hoverColor = PILLAR_COLORS[parseInt(id, 10) % PILLAR_COLORS.length];
 
     layer.setStyle({
         weight: 4,
         color: '#2c3e50',
         fillOpacity: 0.7,
-        fillColor: '#f1c40f'
+        fillColor: hoverColor
     });
     layer.bringToFront();
 
-    const id = layer.feature.properties.BoroCD.toString();
     const infoPanel = document.getElementById('district-info');
 
     const data = districtData[id] || {
