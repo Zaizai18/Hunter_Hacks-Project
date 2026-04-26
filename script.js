@@ -1,4 +1,4 @@
-// --- 1. CONFIGURATION & DATA ---
+
 const districtData = {
     "101": { name: "Financial District", info: "The historic heart of NYC and home to Wall Street." },
     "102": { name: "Greenwich Village / Soho", info: "Famous for its jazz clubs, cafes, and Washington Square Park." },
@@ -14,18 +14,17 @@ const districtData = {
     "112": { name: "Washington Heights / Inwood", info: "Home to The Met Cloisters and Highbridge Park." }
 };
 
-// Unique colors for each district
+
+const assignedColors = {};
+
 function getColor(id) {
-    const colors = {
-        "101": "#e74c3c", "102": "#9b59b6", "103": "#2ecc71", 
-        "104": "#f39c12", "105": "#1abc9c", "106": "#34495e", 
-        "107": "#d35400", "108": "#7f8c8d", "109": "#c0392b", 
-        "110": "#16a085", "111": "#27ae60", "112": "#2980b9"
-    };
-    return colors[id] || "#3498db";
+    if (assignedColors[id]) return assignedColors[id];
+    const hue = Math.floor(Math.random() * 360);
+    const newColor = `hsl(${hue}, 60%, 70%)`;
+    assignedColors[id] = newColor;
+    return newColor;
 }
 
-// --- 2. MAP SETUP & GLOBALS ---
 const map = L.map('map', {
     maxBounds: [[40.68, -74.05], [40.89, -73.88]],
     maxBoundsViscosity: 1.0,
@@ -39,14 +38,13 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 let geojson;
 let allLocations = []; 
 let markerGroup = L.layerGroup().addTo(map);
-let lockedDistrict = null; // Prevents sidebar from clearing after click
+let lockedDistrict = null; 
 
 const treeSVG = `
     <svg viewBox="0 0 24 24" width="50" height="50" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 2L4.5 12h3V22h9V12h3L12 2z" fill="#27ae60" stroke="#1e8449" stroke-width="1"/>
+        <path d="M12 2L4.5 12h3V22h9V12h3L12 2z" fill="#b8d8be" stroke="#1e8449" stroke-width="1"/>
     </svg>`;
 
-// --- 3. INTERACTION FUNCTIONS ---
 
 function highlightFeature(e) {
     const layer = e.target;
@@ -60,7 +58,6 @@ function highlightFeature(e) {
     const id = layer.feature.properties.BoroCD.toString();
     const data = districtData[id] || { name: `District ${id}`, info: "Hover to explore." };
     
-    // Only update text on hover if we haven't locked a selection
     if (!lockedDistrict) {
         document.getElementById('district-info').innerHTML = `
             <h2>${data.name}</h2>
@@ -74,7 +71,6 @@ function resetHighlight(e) {
     const layer = e.target;
     const id = layer.feature.properties.BoroCD.toString();
     
-    // Return to original unique color
     layer.setStyle({
         weight: 2,
         color: "#ffffff",
@@ -89,8 +85,6 @@ function resetHighlight(e) {
         `;
     }
 }
-
-// --- 4. DATA LOADING & CLICK LOGIC ---
 
 fetch('locations.json')
     .then(res => res.json())
@@ -107,7 +101,7 @@ fetch('manhattan_districts.json')
                     color: "#ffffff",
                     weight: 2,
                     fillColor: getColor(feature.properties.BoroCD.toString()),
-                    fillOpacity: 0.6
+                    fillOpacity: 0.3
                 };
             },
             onEachFeature: function(feature, layer) {
@@ -121,13 +115,12 @@ fetch('manhattan_districts.json')
                     mouseout: resetHighlight,
                     click: function(e) {
                         map.fitBounds(e.target.getBounds());
-                        lockedDistrict = id; // Lock the sidebar to this district
+                        lockedDistrict = id; 
 
-                        // UI Updates
+                        
                         document.getElementById('upload-section').classList.remove('hidden');
                         markerGroup.clearLayers();
 
-                        // Filter locations (Super-Safe Version)
                         const localSpots = allLocations.filter(spot => {
                             return String(spot.properties.BoroCD).trim() === String(id).trim();
                         });
@@ -166,7 +159,6 @@ fetch('manhattan_districts.json')
         }).addTo(map);
     });
 
-// --- 5. BUTTON LOGIC ---
 document.getElementById('submit-btn').addEventListener('click', function() {
     const fileInput = document.getElementById('photo-upload');
     if (fileInput.files.length > 0) {
