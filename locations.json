@@ -1,0 +1,18 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "East River Park",
+        "description": "Waterfront views and greenery.",
+        "BoroCD": "103",
+        "type": "Park"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-73.9743, 40.7187]
+      }
+    }
+  ]
+}

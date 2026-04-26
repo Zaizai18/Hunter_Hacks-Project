@@ -53,3 +53,15 @@ h1 {
 #submit-btn:hover {
     background-color: #34495e;
 }
+
+.custom-svg-marker {
+    background: none !important;
+    border: none !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hidden {
+    display: none;
+}
